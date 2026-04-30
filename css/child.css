@@ -1,0 +1,336 @@
+/* ── Layout ───────────────────────────────────────── */
+.child-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem 1rem 4rem;
+}
+
+/* ── App header ───────────────────────────────────── */
+.app-header {
+  text-align: center;
+  padding: 1.5rem 1rem 0.5rem;
+}
+
+.app-title {
+  font-size: clamp(2rem, 8vw, 3rem);
+  background: linear-gradient(135deg, var(--coral), var(--purple), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Countdown card ───────────────────────────────── */
+.countdown-card {
+  text-align: center;
+  margin: 1rem 0;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(135deg, var(--coral), var(--purple));
+  color: #fff;
+  border: none;
+}
+
+.countdown-number {
+  font-size: clamp(4rem, 20vw, 7rem);
+  font-family: 'Fredoka One', cursive;
+  line-height: 1;
+  display: block;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.countdown-label {
+  font-size: clamp(1.1rem, 4vw, 1.6rem);
+  font-weight: 800;
+  margin-top: 0.4rem;
+}
+
+.countdown-date {
+  margin-top: 0.5rem;
+  opacity: 0.88;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* ── Overall progress bar ─────────────────────────── */
+.overall-progress {
+  margin: 1rem 0;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  font-weight: 700;
+}
+
+.progress-bar-track {
+  background: #ede9e0;
+  border-radius: 50px;
+  height: 26px;
+  overflow: hidden;
+  border: 3px solid #fff;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 50px;
+  background: linear-gradient(90deg, var(--yellow), var(--green), var(--teal));
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  min-width: 0;
+}
+
+.progress-pct {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text);
+  pointer-events: none;
+}
+
+/* ── Section titles ───────────────────────────────── */
+.section-title {
+  font-size: 1.7rem;
+  margin: 1.5rem 0 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ── Task cards ───────────────────────────────────── */
+.task-card {
+  margin-bottom: 1rem;
+  border: 3px solid transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.task-card.positive { border-color: var(--green); }
+.task-card.negative { border-color: var(--orange); }
+
+.task-card.complete {
+  border-color: var(--yellow) !important;
+  background: linear-gradient(135deg, #fffde7, #fff9f0);
+}
+
+.task-type-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 10px;
+  border-radius: 50px;
+  margin-bottom: 0.5rem;
+}
+
+.task-card.positive .task-type-badge {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.task-card.negative .task-type-badge {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.task-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+/* ── Star row ─────────────────────────────────────── */
+.stars-row {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 0.9rem;
+}
+
+.star {
+  font-size: clamp(1.4rem, 5vw, 1.9rem);
+  line-height: 1;
+  transition: transform 0.15s;
+}
+
+.star.filled {
+  animation: starFill 0.35s ease forwards;
+}
+
+/* ── Task action buttons ──────────────────────────── */
+.task-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-do-it {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+}
+
+.btn-slip {
+  padding: 10px 16px;
+  background: #fff4ec;
+  color: var(--orange);
+  border: 2.5px solid var(--orange);
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.btn-slip:hover {
+  background: #ffe8d0;
+}
+
+.btn-slip:active {
+  transform: scale(0.94);
+}
+
+/* ── Complete badge ───────────────────────────────── */
+.task-complete-badge {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #15803d;
+  animation: pop 0.35s ease;
+}
+
+/* ── Undo toast ───────────────────────────────────── */
+.undo-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2D3436;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 500;
+  white-space: nowrap;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.undo-toast.hidden { display: none; }
+
+.undo-btn {
+  background: var(--yellow);
+  color: var(--text);
+  border: none;
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.85rem;
+}
+
+.undo-btn:hover { background: #f5d800; }
+
+/* ── Admin link bar ───────────────────────────────── */
+.admin-link-bar {
+  text-align: center;
+  padding: 2rem 0 0.5rem;
+  font-size: 0.82rem;
+}
+
+.admin-link-bar a {
+  color: var(--text-light);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 50px;
+  border: 1.5px solid #ddd;
+  transition: background 0.15s;
+}
+
+.admin-link-bar a:hover { background: #f0f0f0; }
+
+/* ── Empty state ──────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-light);
+}
+
+.empty-state .emoji {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: bounce 2s ease infinite;
+  display: block;
+}
+
+/* ── Confetti canvas ──────────────────────────────── */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 199;
+}
+
+/* ── Celebration overlay ──────────────────────────── */
+.celebration-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 249, 240, 0.96);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  text-align: center;
+  padding: 2rem;
+}
+
+.celebration-overlay.hidden { display: none; }
+
+.celebration-emoji {
+  font-size: 6rem;
+  animation: bounce 1s ease infinite;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.celebration-title {
+  font-size: clamp(2.5rem, 10vw, 4rem);
+  background: linear-gradient(135deg, var(--coral), var(--purple), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.celebration-sub {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2rem;
+}
+
+/* ── Responsive tweaks ────────────────────────────── */
+@media (max-width: 420px) {
+  .task-actions {
+    flex-direction: column;
+  }
+  .btn-do-it {
+    width: 100%;
+  }
+}
