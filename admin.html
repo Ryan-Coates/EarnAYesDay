@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Yes Day admin panel — set tasks and the target date.">
+  <title>Yes Day Admin ⚙️</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- ── Admin toast ────────────────────────────────── -->
+  <div id="admin-toast" class="admin-toast hidden" role="status" aria-live="polite"></div>
+
+  <!-- ── Password screen ───────────────────────────── -->
+  <div id="password-screen" class="password-screen">
+    <div class="card password-card">
+      <span class="password-emoji">🔐</span>
+      <h1 class="password-title">Parent Area</h1>
+      <p class="password-subtitle">Enter the admin password to continue</p>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="password-input">Password</label>
+          <input
+            type="password"
+            id="password-input"
+            class="form-input"
+            placeholder="Enter password…"
+            autocomplete="current-password"
+            required
+          >
+          <span id="password-error" class="error-msg" aria-live="polite"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">🔓 Let me in!</button>
+      </form>
+
+      <p style="margin-top:1.2rem; font-size:0.78rem; color:var(--text-light);">
+        Default password: <strong>EarnAYesDay!</strong>
+      </p>
+    </div>
+
+    <p style="margin-top:1rem;">
+      <a href="index.html" style="color:var(--text-light); text-decoration:none;">← Back to kids view</a>
+    </p>
+  </div>
+
+  <!-- ── Admin Dashboard ───────────────────────────── -->
+  <div id="admin-dashboard" class="admin-dashboard admin-container">
+
+    <header class="admin-header">
+      <h1 class="admin-title">🎉 Yes Day Admin</h1>
+      <p style="color:var(--text-light); margin-top:0.3rem;">Set up your kids' Yes Day challenge!</p>
+      <div class="admin-nav">
+        <a href="index.html" class="btn btn-primary" style="font-size:0.85rem; padding:8px 18px;">👀 Kids View</a>
+      </div>
+    </header>
+
+    <!-- Yes Day Date -->
+    <div class="card admin-section">
+      <h2 class="admin-section-title">📅 Yes Day Date</h2>
+      <p style="color:var(--text-light); font-size:0.9rem; margin-bottom:0.75rem;">
+        Pick the date your kids are working towards!
+      </p>
+      <div class="date-row">
+        <input type="date" id="yes-day-date" class="form-input date-input" aria-label="Yes Day date">
+        <button class="btn btn-primary" onclick="handleSaveDate()">Save 💾</button>
+      </div>
+    </div>
+
+    <!-- Tasks -->
+    <div class="card admin-section">
+      <h2 class="admin-section-title">📋 Tasks</h2>
+
+      <ul id="task-list-admin" class="task-list-admin" aria-label="Task list"></ul>
+
+      <!-- Add / Edit form -->
+      <div class="add-task-form">
+        <h3 class="add-task-form-title">➕ Add / Edit Task</h3>
+        <form id="task-form" novalidate>
+          <div class="form-group">
+            <label for="task-label-input">What do they need to do?</label>
+            <input
+              type="text"
+              id="task-label-input"
+              class="form-input"
+              placeholder="e.g. Empty the dishwasher"
+              maxlength="100"
+              required
+            >
+          </div>
+
+          <div class="form-row-inline">
+            <!-- Type toggle -->
+            <div class="form-group" style="margin:0;">
+              <label style="display:block; font-weight:700; font-size:0.9rem; margin-bottom:0.4rem;">Type</label>
+              <div class="type-toggle" role="group" aria-label="Task type">
+                <input type="radio" name="task-type" id="type-positive" value="positive" checked>
+                <label for="type-positive">⭐ Positive</label>
+                <input type="radio" name="task-type" id="type-negative" value="negative">
+                <label for="type-negative">🚫 Negative</label>
+              </div>
+            </div>
+
+            <!-- Target count -->
+            <div class="form-group" style="margin:0;">
+              <label for="task-target-input" style="display:block; font-weight:700; font-size:0.9rem; margin-bottom:0.4rem;">
+                Target count
+              </label>
+              <input
+                type="number"
+                id="task-target-input"
+                class="form-input target-input"
+                value="5"
+                min="1"
+                max="99"
+                required
+                aria-label="Target count"
+              >
+            </div>
+          </div>
+
+          <div class="form-btns">
+            <button type="submit" id="add-task-btn" class="btn btn-primary">➕ Add Task</button>
+            <button type="button" class="btn" style="background:#ebebeb; color:var(--text); box-shadow:none;" onclick="resetTaskForm()">Clear</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Danger zone -->
+    <div class="card admin-section">
+      <h2 class="admin-section-title">⚠️ Danger Zone</h2>
+      <p style="color:var(--text-light); margin-bottom:1rem; font-size:0.9rem;">
+        Wipes all task progress. Tasks and settings are kept.
+      </p>
+      <button class="btn btn-reset" onclick="handleResetProgress()">🔄 Reset All Progress</button>
+    </div>
+
+  </div><!-- /admin-dashboard -->
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

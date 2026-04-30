@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  --coral:      #FF6B6B;
+  --teal:       #4ECDC4;
+  --yellow:     #FFE66D;
+  --purple:     #A855F7;
+  --blue:       #3B82F6;
+  --green:      #4ADE80;
+  --orange:     #FB923C;
+  --pink:       #F472B6;
+  --bg:         #FFF9F0;
+  --card-bg:    #FFFFFF;
+  --text:       #2D3436;
+  --text-light: #636E72;
+  --radius:     20px;
+  --shadow:     0 4px 20px rgba(0, 0, 0, 0.10);
+  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.16);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle, rgba(255,230,109,0.55) 2px, transparent 2px),
+    radial-gradient(circle, rgba(78,205,196,0.40) 2px, transparent 2px);
+  background-size: 44px 44px, 66px 66px;
+  background-position: 0 0, 22px 33px;
+}
+
+h1, h2, h3 {
+  font-family: 'Fredoka One', cursive;
+  line-height: 1.2;
+}
+
+/* ── Shared buttons ───────────────────────────────── */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 50px;
+  border: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.94) !important;
+}
+
+.btn-primary {
+  background: var(--coral);
+  color: #fff;
+  box-shadow: 0 4px 0 #c0392b;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #c0392b;
+}
+
+.btn-success {
+  background: var(--green);
+  color: #fff;
+  box-shadow: 0 4px 0 #16a34a;
+}
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #16a34a;
+}
+
+.btn-danger {
+  background: var(--coral);
+  color: #fff;
+  box-shadow: 0 4px 0 #b91c1c;
+}
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #b91c1c;
+}
+
+/* ── Shared card ──────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+}
+
+/* ── Animations ───────────────────────────────────── */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25%       { transform: rotate(-6deg); }
+  75%       { transform: rotate(6deg); }
+}
+
+@keyframes pop {
+  0%   { transform: scale(0.7); opacity: 0; }
+  70%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes starFill {
+  0%   { transform: scale(0) rotate(-30deg); }
+  60%  { transform: scale(1.4) rotate(5deg); }
+  100% { transform: scale(1)   rotate(0deg); }
+}
+
+@keyframes slideUp {
+  from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);    opacity: 1; }
+}
+
+.bounce { animation: bounce 1.4s ease infinite; }
+.wiggle { animation: wiggle 0.35s ease; }
+.pop    { animation: pop    0.3s  ease forwards; }
