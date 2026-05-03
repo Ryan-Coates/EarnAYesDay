@@ -126,7 +126,7 @@ EarnAYesDay/
 
 ### Phase 6 — QA & Hardening
 - Test on mobile (iOS Safari, Android Chrome)
-- Test localStorage edge cases (first run, empty state)
+- Test localStorage edge cases (first run, empty state) ii
 - Password: never stored in plaintext — SHA-256 hash only
 - Sanitise all admin text inputs before storing/rendering (prevent XSS)
 
