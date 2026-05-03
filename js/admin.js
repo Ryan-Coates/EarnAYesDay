@@ -10,11 +10,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('login-form').addEventListener('submit', handleLogin);
   document.getElementById('task-form').addEventListener('submit', handleAddTask);
 
-  // Show/hide target input depending on task type
+  // Update target label depending on task type
   document.querySelectorAll('input[name="task-type"]').forEach(radio => {
     radio.addEventListener('change', () => {
       const isNegative = document.querySelector('input[name="task-type"]:checked').value === 'negative';
-      document.getElementById('target-group').style.display = isNegative ? 'none' : '';
+      document.getElementById('target-label').textContent = isNegative ? 'Max strikes before cancel' : 'Target count';
+      document.getElementById('task-target-input').value  = isNegative ? '3' : '5';
     });
   });
 });
@@ -97,7 +98,7 @@ function renderTaskList(state) {
     li.innerHTML = `
       <span class="task-type-icon">${typeEmoji}</span>
       <span class="task-item-label">${escapeHtml(task.label)}</span>
-      <span class="task-item-meta">${isNegative ? `${task.completions.length} strike${task.completions.length !== 1 ? 's' : ''}` : `${progress}/${task.target}`}</span>
+      <span class="task-item-meta">${isNegative ? `${task.completions.length}/${task.target} strikes` : `${progress}/${task.target}`}</span>
       <div class="task-item-actions">
         <button class="btn-icon" data-id="${task.id}" data-action="edit"  title="Edit">✏️</button>
         <button class="btn-icon" data-id="${task.id}" data-action="delete" title="Delete">🗑️</button>
@@ -125,9 +126,9 @@ function handleAddTask(e) {
 
   const label  = document.getElementById('task-label-input').value.trim();
   const type   = document.querySelector('input[name="task-type"]:checked').value;
-  const target = type === 'negative' ? 1 : parseInt(document.getElementById('task-target-input').value, 10);
+  const target = parseInt(document.getElementById('task-target-input').value, 10);
 
-  if (!label || (type === 'positive' && (isNaN(target) || target < 1))) return;
+  if (!label || isNaN(target) || target < 1) return;
 
   const state = getState();
 
@@ -165,7 +166,8 @@ function startEditTask(taskId) {
   document.getElementById('task-label-input').value  = task.label;
   document.getElementById('task-target-input').value = task.target;
   document.querySelector(`input[name="task-type"][value="${task.type}"]`).checked = true;
-  document.getElementById('target-group').style.display = task.type === 'negative' ? 'none' : '';
+  document.getElementById('target-label').textContent = task.type === 'negative' ? 'Max strikes before cancel' : 'Target count';
+  document.getElementById('target-group').style.display = '';
   document.getElementById('add-task-btn').textContent = '💾 Save Changes';
   document.getElementById('task-label-input').focus();
   document.getElementById('task-label-input').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -187,6 +189,7 @@ function deleteTask(taskId) {
 function resetTaskForm() {
   document.getElementById('task-label-input').value  = '';
   document.getElementById('task-target-input').value = '5';
+  document.getElementById('target-label').textContent = 'Target count';
   document.querySelector('input[name="task-type"][value="positive"]').checked = true;
   document.getElementById('target-group').style.display = '';
   document.getElementById('add-task-btn').textContent = '➕ Add Task';
