@@ -71,18 +71,18 @@ function formatDate(dateStr) {
 
 // ── Progress bar ───────────────────────────────────
 function renderProgress(state) {
-  const tasks = state.tasks;
-  const progressCard = document.getElementById('progress-card');
+  const positiveTasks = state.tasks.filter(t => t.type === 'positive');
+  const progressCard  = document.getElementById('progress-card');
 
-  if (!tasks.length) {
+  if (!positiveTasks.length) {
     progressCard.style.display = 'none';
     return;
   }
 
   progressCard.style.display = '';
 
-  const total = tasks.reduce((sum, t) => sum + t.target, 0);
-  const done  = tasks.reduce((sum, t) => sum + Math.min(t.completions.length, t.target), 0);
+  const total = positiveTasks.reduce((sum, t) => sum + t.target, 0);
+  const done  = positiveTasks.reduce((sum, t) => sum + Math.min(t.completions.length, t.target), 0);
   const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
 
   document.getElementById('progress-fill').style.width = pct + '%';
@@ -112,37 +112,47 @@ function renderTaskGroup(containerId, tasks) {
   container.innerHTML = '';
 
   tasks.forEach(task => {
-    const completions = Math.min(task.completions.length, task.target);
-    const isComplete  = completions >= task.target;
-
     const card = document.createElement('div');
-    card.className = `card task-card ${task.type}${isComplete ? ' complete' : ''}`;
 
-    const badgeLabel = task.type === 'positive' ? '⭐ Earn it' : '🛡️ Keep it';
-    const starsHtml  = buildStarsHtml(task.target, completions);
-
-    if (isComplete) {
+    if (task.type === 'negative') {
+      const strikes     = task.completions.length;
+      const strikesHtml = buildStrikesHtml(strikes);
+      card.className    = `card task-card negative${strikes > 0 ? ' has-strikes' : ''}`;
       card.innerHTML = `
-        <span class="task-type-badge">${badgeLabel}</span>
+        <span class="task-type-badge">🚫 Don't do it</span>
         <div class="task-label">${escapeHtml(task.label)}</div>
-        <div class="stars-row">${starsHtml}</div>
-        <div class="task-complete-badge">✅ Amazing job — DONE!</div>
-      `;
-    } else {
-      const doItLabel = task.type === 'positive' ? '⭐ I did it!' : '✅ I kept it!';
-      const slipBtn   = task.type === 'negative'
-        ? `<button class="btn-slip" data-id="${task.id}" data-action="slip">😬 I slipped</button>`
-        : '';
-
-      card.innerHTML = `
-        <span class="task-type-badge">${badgeLabel}</span>
-        <div class="task-label">${escapeHtml(task.label)}</div>
-        <div class="stars-row">${starsHtml}</div>
+        ${strikes > 0 ? `<div class="strikes-row">${strikesHtml}</div>` : ''}
         <div class="task-actions">
-          <button class="btn btn-success btn-do-it" data-id="${task.id}" data-action="complete">${doItLabel}</button>
-          ${slipBtn}
+          ${strikes === 0
+            ? '<span class="strike-clean">✅ Clean!</span>'
+            : `<span class="strike-count">⚡ ${strikes} strike${strikes !== 1 ? 's' : ''}</span>`
+          }
+          <button class="btn-slip" data-id="${task.id}" data-action="slip">😬 I slipped</button>
         </div>
       `;
+    } else {
+      const completions = Math.min(task.completions.length, task.target);
+      const isComplete  = completions >= task.target;
+      const starsHtml   = buildStarsHtml(task.target, completions);
+      card.className    = `card task-card positive${isComplete ? ' complete' : ''}`;
+
+      if (isComplete) {
+        card.innerHTML = `
+          <span class="task-type-badge">⭐ Earn it</span>
+          <div class="task-label">${escapeHtml(task.label)}</div>
+          <div class="stars-row">${starsHtml}</div>
+          <div class="task-complete-badge">✅ Amazing job — DONE!</div>
+        `;
+      } else {
+        card.innerHTML = `
+          <span class="task-type-badge">⭐ Earn it</span>
+          <div class="task-label">${escapeHtml(task.label)}</div>
+          <div class="stars-row">${starsHtml}</div>
+          <div class="task-actions">
+            <button class="btn btn-success btn-do-it" data-id="${task.id}" data-action="complete">⭐ I did it!</button>
+          </div>
+        `;
+      }
     }
 
     container.appendChild(card);
@@ -154,6 +164,12 @@ function buildStarsHtml(target, filled) {
     const isFilled = i < filled;
     return `<span class="star${isFilled ? ' filled' : ''}" aria-hidden="true">${isFilled ? '⭐' : '☆'}</span>`;
   }).join('');
+}
+
+function buildStrikesHtml(count) {
+  return Array.from({ length: count }, () =>
+    `<span class="strike-mark" aria-hidden="true">❌</span>`
+  ).join('');
 }
 
 // ── Delegated click handler ────────────────────────
@@ -182,15 +198,15 @@ function handleComplete(taskId) {
 }
 
 function handleSlip(taskId) {
+  if (!confirm('Add a strike? This cannot be undone.')) return;
+
   const state = getState();
   const task  = state.tasks.find(t => t.id === taskId);
-  if (!task || task.completions.length === 0) return;
+  if (!task) return;
 
-  saveSnapshot(state);
-  task.completions.pop();
+  task.completions.push(new Date().toISOString().slice(0, 10));
   setState(state);
   render();
-  showUndo('Slip recorded 😬');
 }
 
 // ── Undo ───────────────────────────────────────────
@@ -221,12 +237,13 @@ function handleUndo() {
 
 // ── Celebration ────────────────────────────────────
 function checkCelebration(state) {
-  if (!state.tasks.length) {
+  const positiveTasks = state.tasks.filter(t => t.type === 'positive');
+  if (!positiveTasks.length) {
     hideCelebration();
     return;
   }
 
-  const allDone = state.tasks.every(t => t.completions.length >= t.target);
+  const allDone = positiveTasks.every(t => t.completions.length >= t.target);
   if (allDone) {
     showCelebration();
   } else {
