@@ -115,7 +115,6 @@
 }
 
 .task-card.positive { border-color: var(--green); }
-.task-card.negative { border-color: var(--orange); }
 
 .task-card.complete {
   border-color: var(--yellow) !important;
@@ -199,6 +198,37 @@
 
 .btn-slip:active {
   transform: scale(0.94);
+}
+
+/* ── Strike system ───────────────────────────────── */
+.task-card.negative { border-color: var(--orange); }
+.task-card.negative.has-strikes { border-color: #ef4444; background: #fff5f5; }
+
+.strikes-row {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 0.9rem;
+}
+
+.strike-mark {
+  font-size: clamp(1.4rem, 5vw, 1.9rem);
+  line-height: 1;
+  animation: pop 0.35s ease;
+}
+
+.strike-clean {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #15803d;
+  align-self: center;
+}
+
+.strike-count {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #ef4444;
+  align-self: center;
 }
 
 /* ── Complete badge ───────────────────────────────── */
