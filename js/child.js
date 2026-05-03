@@ -116,18 +116,22 @@ function renderTaskGroup(containerId, tasks) {
 
     if (task.type === 'negative') {
       const strikes     = task.completions.length;
+      const maxStrikes  = task.target || 3;
+      const isCancelled = strikes >= maxStrikes;
       const strikesHtml = buildStrikesHtml(strikes);
-      card.className    = `card task-card negative${strikes > 0 ? ' has-strikes' : ''}`;
+      card.className    = `card task-card negative${strikes > 0 ? ' has-strikes' : ''}${isCancelled ? ' cancelled' : ''}`;
       card.innerHTML = `
         <span class="task-type-badge">🚫 Don't do it</span>
         <div class="task-label">${escapeHtml(task.label)}</div>
         ${strikes > 0 ? `<div class="strikes-row">${strikesHtml}</div>` : ''}
         <div class="task-actions">
-          ${strikes === 0
-            ? '<span class="strike-clean">✅ Clean!</span>'
-            : `<span class="strike-count">⚡ ${strikes} strike${strikes !== 1 ? 's' : ''}</span>`
+          ${isCancelled
+            ? '<span class="strike-cancelled">💔 Yes Day Cancelled!</span>'
+            : strikes === 0
+              ? '<span class="strike-clean">✅ Clean!</span>'
+              : `<span class="strike-count">⚡ ${strikes}/${maxStrikes} strike${strikes !== 1 ? 's' : ''}</span>`
           }
-          <button class="btn-slip" data-id="${task.id}" data-action="slip">😬 I slipped</button>
+          ${!isCancelled ? `<button class="btn-slip" data-id="${task.id}" data-action="slip">😬 I slipped</button>` : ''}
         </div>
       `;
     } else {
@@ -235,9 +239,21 @@ function handleUndo() {
   render();
 }
 
-// ── Celebration ────────────────────────────────────
+// ── Celebration / Cancellation ────────────────────
 function checkCelebration(state) {
   const positiveTasks = state.tasks.filter(t => t.type === 'positive');
+  const negativeTasks = state.tasks.filter(t => t.type === 'negative');
+
+  // Check if any negative task has maxed out strikes
+  const isCancelled = negativeTasks.some(t => t.completions.length >= (t.target || 3));
+  if (isCancelled) {
+    hideCelebration();
+    showCancelled();
+    return;
+  }
+
+  hideCancelled();
+
   if (!positiveTasks.length) {
     hideCelebration();
     return;
@@ -249,6 +265,15 @@ function checkCelebration(state) {
   } else {
     hideCelebration();
   }
+}
+
+function showCancelled() {
+  document.getElementById('cancelled-overlay').classList.remove('hidden');
+  stopConfetti();
+}
+
+function hideCancelled() {
+  document.getElementById('cancelled-overlay').classList.add('hidden');
 }
 
 function showCelebration() {

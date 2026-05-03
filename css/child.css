@@ -231,6 +231,19 @@
   align-self: center;
 }
 
+.strike-cancelled {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #991b1b;
+  align-self: center;
+}
+
+.task-card.negative.cancelled {
+  border-color: #991b1b;
+  background: #fef2f2;
+  opacity: 0.85;
+}
+
 /* ── Complete badge ───────────────────────────────── */
 .task-complete-badge {
   text-align: center;
@@ -282,6 +295,10 @@
   text-align: center;
   padding: 2rem 0 0.5rem;
   font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 .admin-link-bar a {
@@ -294,6 +311,15 @@
 }
 
 .admin-link-bar a:hover { background: #f0f0f0; }
+
+.version-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-light);
+  background: #ebebeb;
+  border-radius: 50px;
+  padding: 3px 10px;
+}
 
 /* ── Empty state ──────────────────────────────────── */
 .empty-state {
@@ -332,6 +358,43 @@
 }
 
 .celebration-overlay.hidden { display: none; }
+
+/* ── Cancelled overlay ───────────────────────── */
+.cancelled-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 0, 0, 0.93);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  text-align: center;
+  padding: 2rem;
+}
+
+.cancelled-overlay.hidden { display: none; }
+
+.cancelled-emoji {
+  font-size: 6rem;
+  animation: bounce 1.4s ease infinite;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.cancelled-title {
+  font-size: clamp(2rem, 9vw, 3.5rem);
+  color: #ef4444;
+  margin-bottom: 0.5rem;
+  font-family: 'Fredoka One', cursive;
+}
+
+.cancelled-sub {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fca5a5;
+  margin-bottom: 0;
+}
 
 .celebration-emoji {
   font-size: 6rem;
